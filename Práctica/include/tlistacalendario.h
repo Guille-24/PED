@@ -43,10 +43,11 @@ class TListaCalendario{
         // Devuelve la última posición en la lista
         TListaPos Ultima() const ;
         // Suma de dos sublistas en una nueva lista
-        TListaCalendario SumarSubl (int I_L1, int F_L1, TListaCalendario & L2, int I_L2,
+        TListaCalendario SumarSubl (int I_L1, int F_L1, const TListaCalendario & L2, int I_L2,
         int F_L2);
         // Extraer un rango de nodos de la lista
         TListaCalendario ExtraerRango (int n1, int n2);
+        TListaCalendario ExtraerRangoNM(int n1, int n2);
         //Sobrecarga del operador salida
         friend ostream & operator<<(ostream &, const TListaCalendario &);
 };
@@ -71,9 +72,9 @@ class TListaPos{
 		// Sobrecarga del operador desigualdad
 		bool operator!=(const TListaPos &);
 		// Devuelve la posición siguiente
-		TListaPos Siguiente() const;
+		TListaPos Siguiente();
 		// Posición vacía
-		bool EsVacia() const;
+		bool EsVacia();
 };
 
 class TNodoCalendario{
