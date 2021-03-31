@@ -23,11 +23,11 @@ class TListaCalendario{
         //Sobrecarga del operador resta
         TListaCalendario operator- (const TListaCalendario &);
         // Inserta el elemento en la posición que le corresponda dentro de la lista
-        bool Insertar(TCalendario &);
+        bool Insertar(const TCalendario &);
         // Busca y borra el elemento
-        bool Borrar(TCalendario &);
+        bool Borrar(const TCalendario &);
         // Borra el elemento que ocupa la posición indicada
-        bool Borrar (TListaPos &);
+        bool Borrar (const TListaPos &);
         //Borra todos los Calendarios con fecha ANTERIOR a la pasada.
         bool Borrar(int,int,int);
         // Devuelve true si la lista está vacía, false en caso contrario
@@ -48,7 +48,7 @@ class TListaCalendario{
         // Extraer un rango de nodos de la lista
         TListaCalendario ExtraerRango (int n1, int n2);
         //Sobrecarga del operador salida
-        friend ostream & operator<<(ostream &, TListaCalendario &);
+        friend ostream & operator<<(ostream &, const TListaCalendario &);
 };
 
 class TListaPos{

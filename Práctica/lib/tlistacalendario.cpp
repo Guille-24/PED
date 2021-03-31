@@ -80,13 +80,26 @@ TListaCalendario::TListaCalendario(){
     primero = NULL;
 }
 
-TListaCalendario::TListaCalendario(const TListaCalendario &lc){
-    TNodoCalendario *aux = lc.primero;
-    while (primero != NULL){
-        primero = aux;
-        aux = lc.primero -> siguiente;
-    }
-    aux = NULL;
+TListaCalendario :: TListaCalendario (const TListaCalendario& lc) 
+{
+	primero = lc.primero;
+	TNodoCalendario * aux1, *aux2;
+
+	if (lc.primero != NULL){
+		int i = 1;
+		while (i < lc.Longitud()){
+			aux1 = primero;
+			while (aux1 != NULL){
+				aux2 = aux1 -> siguiente;
+				primero -> c = lc.primero -> c;
+			}
+			aux1 = NULL;
+			aux2 = NULL;
+			i++;
+		}
+	} else{
+		primero = NULL;
+	}
 }
 
 TListaCalendario ::~TListaCalendario(){
@@ -155,9 +168,8 @@ TListaPos TListaCalendario::Ultima() const{
 }
 
 TCalendario TListaCalendario::Obtener(const TListaPos &p) const {
-    bool found = false;
     TListaPos aux(p);
-    if (!p.EsVacia()){
+    if (!aux.EsVacia()){
         return p.pos->c;
     }
     TCalendario obtenido;
@@ -171,6 +183,157 @@ TListaCalendario TListaCalendario::operator+(const TListaCalendario &l){
     TListaPos lizq(Primera());
     TListaPos lder(l.Primera());
 
+    while (!lizq.EsVacia()){
+        resultante.Insertar(lizq.pos -> c);
+        lizq = lizq.Siguiente();
+    }
+    while (!lder.EsVacia()){
+        resultante.Insertar(lder.pos -> c);
+        lder = lder.Siguiente();
+    }
+    return resultante;
+}
 
+bool TListaCalendario::Buscar(const TCalendario &cal){
+    
+    bool founded = false;
+    TListaPos aux;
+    cout << "Entro en el buscar" << endl;
+    TListaCalendario laux(*this);
+    aux.pos = laux.primero;
+    int i = 0;
+    while (i < laux.Longitud()){
+        if (aux.pos -> c == cal){founded = true;}
+        aux = aux.Siguiente();
+        i++;
+    }
+    return founded;
+}
+
+bool TListaCalendario::Insertar(const TCalendario &cal){
+    cout << "entro en el insertar" << endl;
+    bool founded = false;
+    TListaPos actual;
+    TListaPos anterior;
+    TNodoCalendario *n = new TNodoCalendario();
+    cout << "Creo las variables" << endl;
+    if (Buscar(cal)){founded = true;}
+    cout << "No fallo en el buscar" << endl;
+    if (primero == NULL){
+        cout << "Entro en el primer caso" << endl;
+        primero = n;
+        n -> c = cal;
+        founded = true;
+    } else {
+        actual = Primera();
+        while (!founded && !actual.EsVacia()){
+            if (Obtener(actual) > cal){
+                founded = true;
+            } else {
+                anterior = actual;
+                actual = actual.Siguiente();
+            }
+        }
+        if (founded || anterior == Ultima()){
+            if (anterior.EsVacia()){
+                n -> c = cal;
+                n -> siguiente = actual.pos;
+                primero = n;
+            } else if (anterior == Ultima()){
+                n -> c = cal;
+                n -> siguiente = NULL;
+                anterior.pos -> siguiente = n;
+            } else {
+                n -> c = cal;
+                n -> siguiente = actual.pos;
+                anterior.pos -> siguiente = n;
+            }
+        }
+    }
+    return founded;
+}
+
+
+bool TListaCalendario::Borrar(int dia, int mes, int anyo){
+    TListaPos aux(Primera());
+    if (anyo > primero -> c.Anyo()){
+        return true;
+    } else {
+        if (mes > primero -> c.Mes()){
+            return true;
+        } else {
+            if (dia > primero -> c.Dia()){
+                return true;
+            } else {
+                while (!aux.EsVacia()){
+                    if ((aux.pos -> c.Anyo() == anyo && aux.pos -> c.Mes() > mes) ||
+                        aux.pos -> c.Anyo() > anyo ||
+                        (aux.pos -> c.Dia() > dia && aux.pos -> c.Mes() == mes && aux.pos -> c.Anyo() == anyo)){
+                            aux = aux.Siguiente();
+                    } else {
+                        Borrar(aux.pos -> c);
+                        aux = Primera();
+                    }
+                }
+                return false;
+            }
+        }
+    }
+}
+
+bool TListaCalendario::Borrar(const TCalendario &cal){
+    bool founded = false;
+    TListaPos actual(Primera());
+    TListaPos anterior(Primera());
+    if (primero == NULL){return false;}
+    else {
+        if (!Buscar(cal)){return false;}
+        else {
+            if (Obtener(actual) == cal){
+                founded = true;
+                primero = primero->siguiente;
+                delete actual.pos;
+            } else {
+                actual = actual.Siguiente();
+                while (actual.pos != NULL && !founded){
+                    if (Obtener(actual) == cal){
+                        founded = true;
+                        anterior.pos -> siguiente = actual.pos -> siguiente;
+                        delete actual.pos;
+                    } else {
+                        anterior = actual;
+                        actual = actual.Siguiente();
+                    }
+                }
+            }
+        }
+    }
+    return founded;
+}
+
+bool TListaCalendario::Borrar(const TListaPos &l){return Borrar(Obtener(l));}
+
+ostream & operator<<(ostream &o, const TListaCalendario &l){
+    TListaPos aux;
+    aux = l.Primera();
+    if (aux.EsVacia()){
+        o << "<>";
+    } else {
+        o << "<";
+        int i = 0;
+        while (i < l.Longitud()){
+            if (i == 0){
+                o << l.Obtener(aux);
+                cout << "Dentro del while del operator << " << endl;
+            } else {
+                o << " " << l.Obtener(aux);
+            }
+            aux = aux.Siguiente();
+            i++;
+        }
+        o << ">";
+        o << ">";
+    }
+    return o;
 }
 
