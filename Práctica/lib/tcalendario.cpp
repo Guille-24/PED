@@ -110,12 +110,12 @@ TCalendario TCalendario :: operator + (const int d){
         s.dia = dia + d;
         while (!isUnderControl(s.dia, s.mes, s.anyo)){
             if (s.mes == 12){
-                s.dia -= 30;
+                s.dia = s.dia - 31;
                 s.mes = 1;
                 s.anyo++;
             }
             else if (s.mes == 2){
-                if ((s.anyo % 4 == 0) && (s.anyo % 400 == 0) || (s.anyo % 100 != 0)){
+                if ((s.anyo % 4 == 0) && (s.anyo % 400 == 0) && (s.anyo % 100 != 0)){
                     s.dia = s.dia - 29;
                     s.mes++;
                 } else {

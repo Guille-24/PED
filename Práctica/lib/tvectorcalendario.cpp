@@ -1,4 +1,5 @@
 #include "tvectorcalendario.h"
+#include "tcalendario.h"
 
 TVectorCalendario::TVectorCalendario(){
     c = NULL;
@@ -53,11 +54,14 @@ TVectorCalendario &TVectorCalendario::operator= (const TVectorCalendario &v){
 }
 
 bool TVectorCalendario :: operator==(const TVectorCalendario &v){
-    if (this->tamano == v.tamano){
+    if (tamano == v.tamano){
         for (int i = 0; i < v.tamano; i++){
-            (v.c[i] == c[i]);
+            if (v.c[i] != c[i]){
+                return false;
+            }
         }
-    } else{
+        return true;
+    } else {
         return false;
     }
 }
@@ -104,17 +108,48 @@ bool TVectorCalendario::ExisteCal(const TCalendario &c){
     return false;
 }
 
-void TVectorCalendario::MostrarMensajes(int dia, int mes, int anyo){
-    for (int i = 1; i < tamano; i++){
-        if (c[i].Anyo() >= anyo){
-            if (c[i].Mes() >= mes){
-                if (c[i].Dia() >= dia){
-                    cout << c[i].Mensaje() << ", ";
-                }
-            }
-        }
-    }
+void TVectorCalendario::MostrarMensajes(int dia, int mes, int anyo) {
+	int contador = 0;
+    TCalendario calendar(dia, mes, anyo, (char*) "");
+	if(!calendar.isUnderControl(dia, mes, anyo)){
+		cout << "[]";
+	} else{
+		cout << "[";
+		for(int i = 0; i <= tamano; i++){
+			if(c[i].Anyo() > anyo){
+				if(contador > 0){
+					cout<< ", ";
+				}
+				cout << c[i];
+				contador++;
+			} else if(c[i].Anyo() == anyo){
+				if(c[i].Mes() > mes){
+					if(contador > 0){
+						cout << ", ";
+					}
+					cout << c[i];
+					contador++;
+				} else if(c[i].Mes() == mes){
+					if(c[i].Dia() > dia){
+						if(contador > 0){
+							cout<< ", ";
+						}
+						cout << c[i];
+						contador++;
+					} else if(c[i].Dia() == dia){
+						if(contador > 0){
+							cout<< ", ";
+						}
+						cout<< c[i];
+						contador++;
+					}
+				}
+			}
+		}
+		cout<<"]";
+	}
 }
+
 
 bool TVectorCalendario::Redimensionar(int n){
     if (n <= 0 || n == tamano){return false;}

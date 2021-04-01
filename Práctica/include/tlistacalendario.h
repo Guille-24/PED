@@ -47,7 +47,7 @@ class TListaCalendario{
         int F_L2);
         // Extraer un rango de nodos de la lista
         TListaCalendario ExtraerRango (int n1, int n2);
-        TListaCalendario ExtraerRangoNM(int n1, int n2);
+        TListaCalendario ExtraerRangoAux(int n1, int n2);
         //Sobrecarga del operador salida
         friend ostream & operator<<(ostream &, const TListaCalendario &);
 };

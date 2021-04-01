@@ -19,8 +19,7 @@ class TCalendario {
     private:
         int dia, mes, anyo;
         char* mensaje;
-        // Comprueba que las fechas estén correctas
-        bool isUnderControl(int, int, int);
+        
         // auxiliar de copia
         void Copia(const TCalendario &);
         
@@ -56,7 +55,8 @@ class TCalendario {
            bool operator ==(const TCalendario &);
            // Sobrecarga del operador desigualdad;
            bool operator !=(const TCalendario &);
- 
+           // Comprueba que las fechas estén correctas
+           bool isUnderControl(int, int, int);
            // Sobrecarga del operador >; (ver ACLARACIÓN sobre ORDENACIÓN)
            bool operator>(const TCalendario &);
            // Sobrecarga del operador <; (ver ACLARACIÓN sobre ORDENACIÓN)
